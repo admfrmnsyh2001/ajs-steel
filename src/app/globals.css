@@ -1,4 +1,9 @@
-@import "tailwindcss";
+/* Smooth scrolling global */
+html {
+  scroll-behavior: smooth;
+}
+
+
 
 /* Tailwind v4: aktifkan dark mode via class */
 @variant dark (&:where(.dark, .dark *));

@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+/* Tailwind v4: aktifkan dark mode via class */
+@variant dark (&:where(.dark, .dark *));
+
+/* CSS Variables untuk Light Mode */
+:root {
+  --bg-primary: #f4f4f5;       /* zinc-100 */
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --text-primary: #09090b;     /* zinc-950 */
+  --text-secondary: #52525b;   /* zinc-600 */
+  --border-color: #e4e4e7;     /* zinc-200 */
+}
+
+/* CSS Variables untuk Dark Mode */
+.dark {
+  --bg-primary: #09090b;       /* zinc-950 */
+  --bg-secondary: #18181b;     /* zinc-900 */
+  --bg-card: #18181b;
+  --text-primary: #fafafa;     /* zinc-50 */
+  --text-secondary: #a1a1aa;   /* zinc-400 */
+  --border-color: #27272a;     /* zinc-800 */
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Transisi smooth untuk dark mode */
+*, *::before, *::after {
+  transition-property: background-color, border-color, color;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+}
+
+/* Kecualikan animasi dari transisi global */
+.animate-spin, .animate-pulse {
+  transition: none;
+}

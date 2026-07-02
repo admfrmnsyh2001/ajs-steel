@@ -8,6 +8,7 @@ interface Service {
   nama_layanan: string;
   deskripsi: string | null;
   harga_dasar: number | null;
+  url_gambar: string | null;
 }
 
 export const revalidate = 0;
@@ -157,20 +158,36 @@ export default async function LandingPage() {
               {services?.map((service: Service) => (
                 <div
                   key={service.id}
-                  className="group relative rounded-3xl bg-white dark:bg-zinc-900/60 p-8 ring-1 ring-zinc-200 dark:ring-zinc-800 shadow-sm dark:shadow-none overflow-hidden hover:ring-orange-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_40px_-10px_rgba(234,88,12,0.2)]"
+                  className="group relative rounded-3xl bg-white dark:bg-zinc-900/60 ring-1 ring-zinc-200 dark:ring-zinc-800 shadow-sm dark:shadow-none overflow-hidden hover:ring-orange-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_40px_-10px_rgba(234,88,12,0.2)] flex flex-col"
                 >
-                  <div className="absolute -right-20 -top-20 w-40 h-40 bg-orange-500/5 dark:bg-orange-500/10 blur-3xl group-hover:bg-orange-500/15 dark:group-hover:bg-orange-500/20 transition-colors duration-500 rounded-full"></div>
-                  <div className="relative z-10 flex flex-col h-full">
-                    <div className="h-14 w-14 rounded-2xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center border border-zinc-200 dark:border-zinc-700 group-hover:border-orange-500/50 group-hover:shadow-[0_0_15px_rgba(234,88,12,0.2)] transition-all duration-300 mb-6">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
-                    </div>
-                    <h4 className="text-xl font-bold leading-7 text-zinc-900 dark:text-zinc-100 mb-4">{service.nama_layanan}</h4>
+                  {/* Gambar Layanan */}
+                  <div className="relative h-48 bg-zinc-100 dark:bg-zinc-800 overflow-hidden shrink-0">
+                    {service.url_gambar ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={service.url_gambar}
+                        alt={service.nama_layanan}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        <span className="text-xs font-medium">AJS Steel</span>
+                      </div>
+                    )}
+                    {/* Overlay gradient bawah */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                  </div>
+
+                  {/* Konten */}
+                  <div className="p-6 flex flex-col flex-grow">
+                    <h4 className="text-xl font-bold leading-7 text-zinc-900 dark:text-zinc-100 mb-3">{service.nama_layanan}</h4>
                     <p className="leading-relaxed text-zinc-500 dark:text-zinc-400 text-sm flex-grow">
                       {service.deskripsi || "Hubungi kami untuk deskripsi lebih lanjut mengenai layanan ini."}
                     </p>
-                    <div className="mt-8 pt-6 border-t border-zinc-100 dark:border-zinc-800/80 group-hover:border-zinc-200 dark:group-hover:border-zinc-700 transition-colors flex items-center justify-between">
+                    <div className="mt-6 pt-5 border-t border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between">
                       <div>
                         <p className="text-xs font-medium text-zinc-400 uppercase tracking-wide mb-1">Mulai Dari</p>
                         <p className="text-xl font-bold text-zinc-900 dark:text-white">

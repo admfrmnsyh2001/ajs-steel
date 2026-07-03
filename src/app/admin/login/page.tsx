@@ -46,7 +46,7 @@ export default function AdminLoginPage() {
     <main className="min-h-screen bg-zinc-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 selection:bg-orange-500/30">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
         {/* Ikon/Logo */}
-        <div className="mx-auto h-16 w-16 bg-zinc-900 border border-zinc-800 flex items-center justify-center rounded-2xl shadow-[0_0_15px_rgba(234,88,12,0.2)] mb-6">
+        <div className="mx-auto h-16 w-16 bg-zinc-900 border border-zinc-800 flex items-center justify-center rounded-2xl shadow-[0_0_15px_rgba(50,130,184,0.2)] mb-6">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
           </svg>

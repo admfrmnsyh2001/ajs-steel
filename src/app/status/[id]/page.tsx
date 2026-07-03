@@ -97,7 +97,7 @@ export default async function StatusPage({ params }: { params: Promise<{ id: str
                   <div key={step.id} className="flex flex-col items-center">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 z-10 transition-colors duration-300 ${
                       isCompleted ? 'bg-orange-600 border-orange-600 text-white' : 
-                      isCurrent ? 'bg-zinc-900 border-orange-500 text-orange-500 shadow-[0_0_15px_rgba(234,88,12,0.5)]' : 
+                      isCurrent ? 'bg-zinc-900 border-orange-500 text-orange-500 shadow-[0_0_15px_rgba(50,130,184,0.5)]' : 
                       'bg-zinc-950 border-zinc-800 text-zinc-600'
                     }`}>
                       {isCompleted ? (

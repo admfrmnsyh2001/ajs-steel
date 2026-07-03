@@ -47,7 +47,7 @@ export default async function LandingPage() {
               AJS Steel adalah bengkel las profesional yang mengubah material mentah menjadi mahakarya tangguh untuk kebutuhan arsitektur dan industri Anda.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/order" className="w-full sm:w-auto rounded-full bg-orange-600 px-8 py-4 text-sm font-bold text-white shadow-[0_0_20px_rgba(234,88,12,0.4)] hover:bg-orange-500 hover:shadow-[0_0_30px_rgba(234,88,12,0.6)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2">
+              <Link href="/order" className="w-full sm:w-auto rounded-full bg-orange-600 px-8 py-4 text-sm font-bold text-white shadow-[0_0_20px_rgba(15,76,117,0.4)] hover:shadow-[0_0_30px_rgba(15,76,117,0.6)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2">
                 Mulai Proyek Anda
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
               </Link>
@@ -158,7 +158,7 @@ export default async function LandingPage() {
               {services?.map((service: Service) => (
                 <div
                   key={service.id}
-                  className="group relative rounded-3xl bg-white dark:bg-zinc-900/60 ring-1 ring-zinc-200 dark:ring-zinc-800 shadow-sm dark:shadow-none overflow-hidden hover:ring-orange-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_40px_-10px_rgba(234,88,12,0.2)] flex flex-col"
+                  className="group relative rounded-3xl bg-white dark:bg-zinc-900/60 ring-1 ring-zinc-200 dark:ring-zinc-800 shadow-sm dark:shadow-none overflow-hidden hover:ring-orange-500/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_40px_-10px_rgba(50,130,184,0.2)] flex flex-col"
                 >
                   {/* Gambar Layanan */}
                   <div className="relative h-48 bg-zinc-100 dark:bg-zinc-800 overflow-hidden shrink-0">

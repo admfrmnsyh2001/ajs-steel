@@ -36,7 +36,7 @@ export function Navbar() {
           href="/#beranda"
           className="flex items-center gap-2 group"
         >
-          <div className="w-10 h-10 bg-orange-600 rounded-xl flex items-center justify-center font-bold text-lg text-white group-hover:bg-orange-500 transition-colors shadow-[0_0_15px_rgba(234,88,12,0.4)]">
+          <div className="w-10 h-10 bg-orange-600 rounded-xl flex items-center justify-center font-bold text-lg text-white group-hover:bg-orange-500 transition-colors shadow-[0_0_15px_rgba(15,76,117,0.4)]">
             AJS
           </div>
           <span

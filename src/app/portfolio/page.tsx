@@ -80,7 +80,7 @@ export default async function PortfolioPage() {
                 {portfolios.map((item: Portfolio) => (
                   <div 
                     key={item.id} 
-                    className="break-inside-avoid group relative rounded-2xl overflow-hidden border border-zinc-800 hover:border-orange-500/50 shadow-lg hover:shadow-[0_8px_30px_rgba(234,88,12,0.2)] transition-all duration-500"
+                    className="break-inside-avoid group relative rounded-2xl overflow-hidden border border-zinc-800 hover:border-orange-500/50 shadow-lg hover:shadow-[0_8px_30px_rgba(50,130,184,0.2)] transition-all duration-500"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img 
@@ -109,7 +109,7 @@ export default async function PortfolioPage() {
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-white mb-4">Tertarik Membuat Proyek Serupa?</h2>
             <p className="text-zinc-400 mb-8">Ceritakan kebutuhan Anda dan kami akan mewujudkannya dengan material terbaik.</p>
-            <Link href="/order" className="inline-block bg-orange-600 hover:bg-orange-500 text-white px-8 py-4 rounded-full font-bold shadow-[0_0_20px_rgba(234,88,12,0.4)] hover:shadow-[0_0_30px_rgba(234,88,12,0.6)] hover:-translate-y-1 transition-all duration-300">
+            <Link href="/order" className="inline-block bg-orange-600 hover:bg-orange-500 text-white px-8 py-4 rounded-full font-bold shadow-[0_0_20px_rgba(15,76,117,0.4)] hover:shadow-[0_0_30px_rgba(15,76,117,0.6)] hover:-translate-y-1 transition-all duration-300">
               Konsultasi & Pesan Sekarang
             </Link>
           </div>

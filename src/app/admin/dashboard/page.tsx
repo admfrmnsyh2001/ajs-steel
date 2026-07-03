@@ -1,42 +1,26 @@
 "use client";
 
-import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-
-interface Order {
-  id: string;
-  nama_customer: string;
-  no_hp: string;
-  status: string;
-  created_at: string;
-  services: { nama_layanan: string };
-}
+import { useState, useEffect } from 'react';
 
 export default function AdminDashboard() {
   const router = useRouter();
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [serviceCount, setServiceCount] = useState<number | null>(null);
+  const [portfolioCount, setPortfolioCount] = useState<number | null>(null);
 
   useEffect(() => {
-    fetchOrders();
-  }, []);
-
-  const fetchOrders = async () => {
-    setLoading(true);
-    const { data, error } = await supabase
-      .from('orders')
-      .select('id, nama_customer, no_hp, status, created_at, services(nama_layanan)')
-      .order('created_at', { ascending: false });
-
-    if (!error && data) {
-      // @ts-ignore
-      setOrders(data);
+    async function fetchCounts() {
+      const [{ count: sc }, { count: pc }] = await Promise.all([
+        supabase.from('services').select('*', { count: 'exact', head: true }),
+        supabase.from('portfolios').select('*', { count: 'exact', head: true }),
+      ]);
+      setServiceCount(sc ?? 0);
+      setPortfolioCount(pc ?? 0);
     }
-    setLoading(false);
-  };
+    fetchCounts();
+  }, []);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -45,121 +29,99 @@ export default function AdminDashboard() {
     router.push('/admin/login');
   };
 
-  const filteredOrders = filterStatus === 'all' 
-    ? orders 
-    : orders.filter(o => o.status === filterStatus);
-
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'pending': return <span className="px-3 py-1 text-xs font-semibold rounded-full bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">Pending</span>;
-      case 'survey': return <span className="px-3 py-1 text-xs font-semibold rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">Survey</span>;
-      case 'dikerjakan': return <span className="px-3 py-1 text-xs font-semibold rounded-full bg-orange-500/10 text-orange-500 border border-orange-500/20">Dikerjakan</span>;
-      case 'selesai': return <span className="px-3 py-1 text-xs font-semibold rounded-full bg-green-500/10 text-green-400 border border-green-500/20">Selesai</span>;
-      default: return <span className="px-3 py-1 text-xs font-semibold rounded-full bg-zinc-500/10 text-zinc-400 border border-zinc-500/20">{status}</span>;
-    }
-  };
+  const cards = [
+    {
+      href: '/admin/layanan',
+      label: 'Kelola Katalog Layanan',
+      desc: 'Tambah, edit, atau hapus layanan yang ditampilkan di halaman utama.',
+      count: serviceCount,
+      countLabel: 'Layanan aktif',
+      icon: (
+        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        </svg>
+      ),
+    },
+    {
+      href: '/admin/portfolio',
+      label: 'Kelola Portfolio',
+      desc: 'Unggah dan kelola foto hasil proyek yang ditampilkan di galeri portfolio.',
+      count: portfolioCount,
+      countLabel: 'Foto portfolio',
+      icon: (
+        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+      ),
+    },
+  ];
 
   return (
     <main className="min-h-screen bg-zinc-950 text-zinc-100 p-6 sm:p-10">
-      <div className="max-w-7xl mx-auto">
-        
+      <div className="max-w-4xl mx-auto">
+
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10 pb-6 border-b border-zinc-800">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-12 pb-6 border-b border-zinc-800">
           <div>
             <h1 className="text-3xl font-bold text-white tracking-tight">Dashboard Admin</h1>
-            <p className="text-zinc-400 mt-1">Kelola semua pesanan masuk AJS Steel</p>
+            <p className="text-zinc-400 mt-1">AJS Steel — Kelola katalog & portfolio</p>
           </div>
-          <div className="flex gap-4">
-            <Link href="/admin/layanan" className="bg-zinc-800 hover:bg-zinc-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-              Kelola Layanan
-            </Link>
-            <Link href="/admin/portfolio" className="bg-zinc-800 hover:bg-zinc-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-              Kelola Portfolio
-            </Link>
-            <button onClick={handleLogout} className="bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-              Logout
-            </button>
-          </div>
-        </div>
-
-        {/* Filter */}
-        <div className="mb-6 flex items-center gap-4">
-          <label className="text-sm font-medium text-zinc-400">Filter Status:</label>
-          <select 
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-            className="bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:ring-orange-500 focus:border-orange-500 outline-none"
+          <button
+            onClick={handleLogout}
+            className="self-start sm:self-auto bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
           >
-            <option value="all">Semua Pesanan</option>
-            <option value="pending">Pending</option>
-            <option value="survey">Survey</option>
-            <option value="dikerjakan">Dikerjakan</option>
-            <option value="selesai">Selesai</option>
-          </select>
+            Logout
+          </button>
         </div>
 
-        {/* Tabel Pesanan */}
-        <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl overflow-hidden shadow-xl backdrop-blur-sm">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-zinc-900/80 border-b border-zinc-800 text-zinc-400 text-sm uppercase tracking-wider">
-                  <th className="p-4 font-semibold">Tanggal Masuk</th>
-                  <th className="p-4 font-semibold">Pelanggan</th>
-                  <th className="p-4 font-semibold">No. HP</th>
-                  <th className="p-4 font-semibold">Layanan</th>
-                  <th className="p-4 font-semibold">Status</th>
-                  <th className="p-4 font-semibold text-right">Aksi</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-zinc-800/50">
-                {loading ? (
-                  <tr>
-                    <td colSpan={6} className="p-8 text-center text-zinc-500">
-                      <svg className="animate-spin mx-auto h-6 w-6 text-orange-500 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Memuat data...
-                    </td>
-                  </tr>
-                ) : filteredOrders.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="p-8 text-center text-zinc-500">
-                      Tidak ada pesanan ditemukan.
-                    </td>
-                  </tr>
-                ) : (
-                  filteredOrders.map((order) => (
-                    <tr 
-                      key={order.id} 
-                      onClick={() => router.push(`/admin/pesanan/${order.id}`)}
-                      className="hover:bg-zinc-800/30 cursor-pointer transition-colors group"
-                    >
-                      <td className="p-4 text-sm text-zinc-400 whitespace-nowrap">
-                        {new Date(order.created_at).toLocaleDateString('id-ID')}
-                      </td>
-                      <td className="p-4 text-sm font-medium text-zinc-100 whitespace-nowrap">
-                        {order.nama_customer}
-                      </td>
-                      <td className="p-4 text-sm text-zinc-300 whitespace-nowrap">
-                        {order.no_hp}
-                      </td>
-                      <td className="p-4 text-sm text-zinc-300 whitespace-nowrap">
-                        {order.services?.nama_layanan}
-                      </td>
-                      <td className="p-4 whitespace-nowrap">
-                        {getStatusBadge(order.status)}
-                      </td>
-                      <td className="p-4 text-right whitespace-nowrap">
-                        <span className="text-orange-500 text-sm font-medium group-hover:text-orange-400 transition-colors">Lihat Detail &rarr;</span>
-                      </td>
-                    </tr>
-                  ))
+        {/* Quick Link to website */}
+        <div className="mb-8 p-4 rounded-xl bg-zinc-900/60 border border-zinc-800 flex items-center justify-between gap-4">
+          <p className="text-zinc-400 text-sm">Lihat tampilan website publik</p>
+          <Link
+            href="/"
+            target="_blank"
+            className="text-orange-500 hover:text-orange-400 text-sm font-medium transition-colors flex items-center gap-1"
+          >
+            Buka Website
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </Link>
+        </div>
+
+        {/* Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {cards.map((card) => (
+            <Link
+              key={card.href}
+              href={card.href}
+              className="group bg-zinc-900/50 border border-zinc-800 hover:border-orange-500/40 rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_40px_-10px_rgba(50,130,184,0.25)] flex flex-col gap-6"
+            >
+              <div className="flex items-start justify-between">
+                <div className="w-14 h-14 rounded-xl bg-zinc-800 group-hover:bg-orange-600/20 flex items-center justify-center text-orange-500 transition-colors">
+                  {card.icon}
+                </div>
+                {card.count !== null && (
+                  <div className="text-right">
+                    <p className="text-3xl font-bold text-white">{card.count}</p>
+                    <p className="text-xs text-zinc-500 mt-0.5">{card.countLabel}</p>
+                  </div>
                 )}
-              </tbody>
-            </table>
-          </div>
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-white mb-1 group-hover:text-orange-400 transition-colors">
+                  {card.label}
+                </h2>
+                <p className="text-zinc-500 text-sm leading-relaxed">{card.desc}</p>
+              </div>
+              <div className="flex items-center gap-1 text-orange-500 text-sm font-medium mt-auto">
+                Kelola Sekarang
+                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </Link>
+          ))}
         </div>
 
       </div>

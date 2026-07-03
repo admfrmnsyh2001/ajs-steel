@@ -15,16 +15,6 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Smooth scroll ke section dengan offset agar tidak tertutup navbar
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
-    e.preventDefault();
-    const target = document.getElementById(targetId);
-    if (!target) return;
-    const navbarHeight = 80; // tinggi navbar (h-20 = 80px)
-    const top = target.getBoundingClientRect().top + window.scrollY - navbarHeight;
-    window.scrollTo({ top, behavior: 'smooth' });
-  };
-
   const navLinks = [
     { label: 'Beranda', id: 'beranda' },
     { label: 'Tentang Kami', id: 'tentang' },
@@ -42,9 +32,8 @@ export function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 h-20 flex items-center justify-between">
         {/* Logo */}
-        <a
-          href="#beranda"
-          onClick={(e) => handleNavClick(e, 'beranda')}
+        <Link
+          href="/#beranda"
           className="flex items-center gap-2 group"
         >
           <div className="w-10 h-10 bg-orange-600 rounded-xl flex items-center justify-center font-bold text-lg text-white group-hover:bg-orange-500 transition-colors shadow-[0_0_15px_rgba(234,88,12,0.4)]">
@@ -57,7 +46,7 @@ export function Navbar() {
           >
             STEEL
           </span>
-        </a>
+        </Link>
 
         {/* Menu */}
         <div
@@ -68,14 +57,13 @@ export function Navbar() {
           }`}
         >
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.id}
-              href={`#${link.id}`}
-              onClick={(e) => handleNavClick(e, link.id)}
+              href={`/#${link.id}`}
               className="hover:text-orange-500 transition-colors duration-200 relative after:absolute after:bottom-[-2px] after:left-0 after:w-0 after:h-[2px] after:bg-orange-500 after:transition-all after:duration-300 hover:after:w-full"
             >
               {link.label}
-            </a>
+            </Link>
           ))}
         </div>
 
